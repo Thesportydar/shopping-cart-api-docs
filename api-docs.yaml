@@ -1,0 +1,1479 @@
+openapi: 3.1.0
+info:
+  title: Shopping Cart API
+  description: API for managing shopping carts and products with user authentication.
+  contact:
+    name: Iñaqui Paladino
+    email: ipaladinobravo@gmail.com
+  version: "1.0"
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Auth API
+  description: Endpoints for user authentication (login).
+- name: Product API
+  description: Endpoints for managing products in the system.
+- name: Order API
+  description: Endpoints for managing customer orders.
+- name: User API
+  description: Endpoints for managing users in the system. All operations requires
+    ADMIN ROLE.
+- name: My Cart API
+  description: Endpoints for managing the user's shopping cart.
+- name: Image API
+  description: Endpoints for managing product images.
+- name: Category API
+  description: Endpoints for managing product categories in the system.
+paths:
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - User API
+      summary: Get User by ID
+      description: Retrieve a user by their ID.
+      operationId: findById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDto"
+      security:
+      - JWT: []
+    put:
+      tags:
+      - User API
+      summary: Update user details
+      description: Update the details of an existing user by their ID.
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDto"
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - User API
+      summary: Delete user by ID
+      description: Delete a user by their ID.
+      operationId: deleteUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - JWT: []
+  /api/v1/products/{id}:
+    get:
+      tags:
+      - Product API
+      summary: Get product by ID
+      description: Retrieve a single product by its ID.
+      operationId: findProductById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDto"
+    put:
+      tags:
+      - Product API
+      summary: Update a product
+      description: Update the details of an existing product by its ID. Requires ADMIN
+        role.
+      operationId: updateProduct
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDto"
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Product API
+      summary: Delete a product
+      description: Delete a product by its ID. Requires ADMIN role.
+      operationId: deleteProduct
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - JWT: []
+  /api/v1/my-cart/items/{productId}:
+    put:
+      tags:
+      - My Cart API
+      summary: Update item quantity in current user's cart
+      description: Update the quantity of an item in the shopping cart for the currently
+        authenticated user.
+      operationId: updateItemQuantity
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: quantity
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CartItemDto"
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - My Cart API
+      summary: Remove item from current user's cart
+      description: Remove an item from the shopping cart for the currently authenticated
+        user by product ID.
+      operationId: removeItemFromCart
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - JWT: []
+  /api/v1/images/{imageId}:
+    get:
+      tags:
+      - Image API
+      summary: Download an image by ID
+      description: Download an image by its ID. The image is returned as a resource
+        for the client to download.
+      operationId: downloadImage
+      parameters:
+      - name: imageId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+    put:
+      tags:
+      - Image API
+      summary: Update an existing image (ADMIN ONLY)
+      description: Update the image associated with a specific image ID. This operation
+        is restricted to users with the ADMIN role.
+      operationId: updateImage
+      parameters:
+      - name: imageId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+    delete:
+      tags:
+      - Image API
+      summary: Delete an image by ID (ADMIN ONLY)
+      description: Delete an image by its ID. This operation is restricted to users
+        with the ADMIN role.
+      operationId: deleteImage
+      parameters:
+      - name: imageId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+  /api/v1/categories/{id}:
+    get:
+      tags:
+      - Category API
+      summary: Get category by ID
+      description: Retrieve a single product category by its ID.
+      operationId: findCategoryById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CategoryDto"
+    put:
+      tags:
+      - Category API
+      summary: Update a category
+      description: Update the details of an existing product category. Requires ADMIN
+        role.
+      operationId: updateCategory
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCategoryRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CategoryDto"
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Category API
+      summary: Delete category by ID
+      description: Delete a product category by its ID. Requires ADMIN role.
+      operationId: deleteCategoryById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - JWT: []
+  /api/v1/users:
+    post:
+      tags:
+      - User API
+      summary: Create a new user
+      description: Create a new user with the provided details.
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDto"
+      security:
+      - JWT: []
+  /api/v1/products:
+    get:
+      tags:
+      - Product API
+      summary: Get all products
+      description: "Retrieve a list of all products with optional filters by category,\
+        \ brand, and name."
+      operationId: findAllProducts
+      parameters:
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: brand
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductDto"
+    post:
+      tags:
+      - Product API
+      summary: Add a new product
+      description: Add a new product to the system. Requires ADMIN role.
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDto"
+      security:
+      - JWT: []
+  /api/v1/orders:
+    get:
+      tags:
+      - Order API
+      summary: Get current user's orders
+      description: Retrieve all orders placed by the currently authenticated user.
+      operationId: findCurrentUserOrders
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderDto"
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Order API
+      summary: Place a new order
+      description: Place a new order for the currently authenticated user.
+      operationId: placeOrder
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderDto"
+      security:
+      - JWT: []
+  /api/v1/my-cart/items:
+    post:
+      tags:
+      - My Cart API
+      summary: Add item to current user's cart
+      description: Add a new item to the shopping cart for the currently authenticated
+        user.
+      operationId: addItemToCart
+      parameters:
+      - name: request
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/CartItemRequest"
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - JWT: []
+  /api/v1/images:
+    post:
+      tags:
+      - Image API
+      summary: Upload images for a product
+      description: Upload one or more images and associate them with a product.
+      operationId: saveImages
+      parameters:
+      - name: files
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            format: binary
+      - name: productId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema: {}
+  /api/v1/categories:
+    get:
+      tags:
+      - Category API
+      summary: Get all categories
+      description: Retrieve a list of all product categories in the system.
+      operationId: findAllCategories
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryDto"
+    post:
+      tags:
+      - Category API
+      summary: Create a new category
+      description: Create a new product category. Requires ADMIN role.
+      operationId: saveCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCategoryRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CategoryDto"
+      security:
+      - JWT: []
+  /api/v1/auth/login:
+    post:
+      tags:
+      - Auth API
+      summary: User login
+      description: "Authenticate a user using email and password, and return a JWT\
+        \ token for authenticated requests."
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/JwtResponse"
+  /api/v1/products/count:
+    get:
+      tags:
+      - Product API
+      summary: Count products by brand and name
+      description: Count the number of products that match the specified brand and
+        name.
+      operationId: countAllProductsByBrandAndName
+      parameters:
+      - name: brandName
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+  /api/v1/orders/{orderId}:
+    get:
+      tags:
+      - Order API
+      summary: Get order details by ID (ADMIN ONLY)
+      description: Retrieve details of an order by its ID. This endpoint is accessible
+        only by users with the ADMIN role.
+      operationId: findById_1
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderDto"
+      security:
+      - JWT: []
+  /api/v1/orders/users/{userId}:
+    get:
+      tags:
+      - Order API
+      summary: Get orders by user ID (ADMIN ONLY)
+      description: Retrieve all orders associated with a specific user by their user
+        ID. This endpoint is accessible only by users with the ADMIN role.
+      operationId: findByUserId
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderDto"
+      security:
+      - JWT: []
+  /api/v1/my-cart:
+    get:
+      tags:
+      - My Cart API
+      summary: Get current user's cart
+      description: Retrieve the shopping cart for the currently authenticated user.
+      operationId: findCart
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CartDto"
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - My Cart API
+      summary: Clear current user's cart
+      description: Remove all items from the shopping cart for the currently authenticated
+        user.
+      operationId: clearCart
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - JWT: []
+  /api/v1/my-cart/total:
+    get:
+      tags:
+      - My Cart API
+      summary: Calculate the total of the current user's cart
+      description: Calculate the total price of the items in the shopping cart for
+        the currently authenticated user.
+      operationId: calculateTotal
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+      security:
+      - JWT: []
+  /api/v1/categories/name/{name}:
+    get:
+      tags:
+      - Category API
+      summary: Get category by name
+      description: Retrieve a product category by its name.
+      operationId: findCategoryByName
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CategoryDto"
+components:
+  schemas:
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        properties:
+          type: object
+          additionalProperties: {}
+    UpdateUserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+      required:
+      - firstName
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+    CreateProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        brand:
+          type: string
+        price:
+          type: number
+        inventory:
+          type: integer
+          format: int32
+        category:
+          type: string
+      required:
+      - brand
+      - category
+      - inventory
+      - name
+      - price
+    CategoryDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ImageDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        downloadUrl:
+          type: string
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        brand:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        inventory:
+          type: integer
+          format: int32
+        category:
+          $ref: "#/components/schemas/CategoryDto"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImageDto"
+    CartItemDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int32
+        unitPrice:
+          type: number
+        productId:
+          type: integer
+          format: int64
+        productName:
+          type: string
+    CreateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    CreateUserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - firstName
+      - password
+    OrderDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        total:
+          type: number
+        status:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDto"
+    OrderItemDto:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        productName:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        price:
+          type: number
+    CartItemRequest:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int32
+      required:
+      - productId
+      - quantity
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+    JwtResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        token:
+          type: string
+    CartDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        cartItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItemDto"
+          uniqueItems: true
+        total:
+          type: number
